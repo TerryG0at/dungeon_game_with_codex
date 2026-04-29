@@ -1,24 +1,31 @@
-# Dungeon Browser 3D Prototype
+# Dungeon Run
 
-A simple 3D dungeon game prototype that runs in the browser using Three.js.
+A browser-based 3D dungeon crawler built with Three.js.
 
 ## Features
-- Third-person 3D movement with keyboard + mouse.
-- Sword and gun weapons with damage and gun ammo/reload.
-- Goblin enemies with line-of-sight based chase and attack AI.
-- HP bars for player and enemies.
-- Small explorable dungeon map with multiple rooms/corridors.
-- RNG loot drops on enemy death (gold, ammo, upgrades).
-- XP/level progression and boss-based win condition.
-- Checkpoint respawn system.
+- Room-and-corridor dungeon with a key, sealed gate, chests, pickups, minimap, and boss clear condition.
+- Reliable wall collision and top-down mouse aiming.
+- Sword and gun combat with visible weapon models, swing effects, muzzle flashes, bullet traces, enemy melee/ranged behavior, projectiles, knockback, and health bars.
+- Player leveling, stamina, dodge, potions, gold, ammo, and restartable win/loss flow.
+
+## Controls
+- WASD: move
+- Mouse: aim
+- Left mouse: attack
+- Shift: sprint
+- Space: dodge
+- 1 / 2 or mouse wheel: switch sword/gun
+- R: reload gun
+- Q: use potion
+- Right mouse drag, Z/X, or arrow left/right: rotate the camera 360 degrees
 
 ## Run
 Because this uses ES module imports from a CDN, run via a local web server:
 
 ```bash
-python3 -m http.server 8000
+python -m http.server 8000
 ```
 
 Then open:
 
-- http://localhost:8000
+- http://127.0.0.1:8000/

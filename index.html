@@ -3,12 +3,12 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Dungeon Browser 3D Prototype</title>
+    <title>Dungeon Run</title>
     <link rel="stylesheet" href="styles.css" />
   </head>
   <body>
     <div id="ui">
-      <div id="playerPanel">
+      <section id="playerPanel" class="panel">
         <div class="bar-label">HP <span id="playerHpText"></span></div>
         <div class="bar"><div id="playerHpBar" class="fill hp"></div></div>
         <div class="bar-label">Stamina <span id="playerStaminaText"></span></div>
@@ -16,13 +16,32 @@
         <div class="bar-label">XP <span id="playerXpText"></span></div>
         <div class="bar"><div id="playerXpBar" class="fill xp"></div></div>
         <div id="stats"></div>
-      </div>
-      <div id="weaponPanel"></div>
+      </section>
+
+      <section id="runPanel" class="panel">
+        <div id="objectiveText"></div>
+        <div id="roomText"></div>
+        <canvas id="minimap" width="168" height="136"></canvas>
+      </section>
+
+      <section id="weaponPanel" class="panel">
+        <div id="weaponName"></div>
+        <div id="weaponMeta"></div>
+      </section>
+
+      <section id="bossPanel" class="panel hidden">
+        <div id="bossName"></div>
+        <div class="bar boss"><div id="bossHpBar" class="fill boss-fill"></div></div>
+      </section>
+
       <div id="message"></div>
-      <div id="crosshair">+</div>
-      <div id="help">
-        WASD move • Shift sprint • Space jump • C dodge • LMB attack/shoot • R reload • 1/2 or mousewheel switch weapon
-      </div>
+      <div id="reticle"></div>
+
+      <section id="screenOverlay" class="hidden">
+        <div id="overlayTitle"></div>
+        <div id="overlaySubtitle"></div>
+        <button id="restartButton" type="button">Retry</button>
+      </section>
     </div>
     <script type="module" src="game.js"></script>
   </body>

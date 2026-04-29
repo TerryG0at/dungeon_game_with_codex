@@ -1,15 +1,279 @@
-body { margin: 0; overflow: hidden; background: #06070d; color: #eee; font-family: Arial, sans-serif; }
-#ui { position: fixed; inset: 0; pointer-events: none; }
-#playerPanel { position: absolute; top: 12px; left: 12px; width: 260px; background: rgba(0,0,0,.45); padding: 10px; border-radius: 8px; }
-.bar-label { font-size: 12px; margin: 4px 0; display:flex; justify-content:space-between; }
-.bar { width: 100%; height: 12px; background: #222; border: 1px solid #555; border-radius: 8px; overflow: hidden; }
-.fill { height: 100%; width: 100%; transition: width .2s linear; }
-.hp { background: linear-gradient(90deg,#8b0000,#e53935); }
-.stamina { background: linear-gradient(90deg,#2f7d32,#6bd66f); }
-.xp { background: linear-gradient(90deg,#1c3d9f,#4ea1ff); }
-#weaponPanel { position: absolute; right: 12px; top: 12px; background: rgba(0,0,0,.45); padding: 8px 10px; border-radius:8px; text-align:right; }
-#help { position:absolute; bottom:10px; left:50%; transform:translateX(-50%); font-size:12px; background:rgba(0,0,0,.4); padding:6px 10px; border-radius:8px; }
-#message { position: absolute; left: 50%; top: 12%; transform: translateX(-50%); font-size: 20px; font-weight: bold; color: #ffd54f; text-shadow: 0 0 8px #000; }
-#crosshair { position: absolute; left: 50%; top: 50%; transform: translate(-50%,-50%); opacity: .65; }
-.enemy-hp { position: absolute; width: 50px; height: 7px; background:#220; border:1px solid #664; border-radius:4px; overflow:hidden; }
-.enemy-hp > div { height:100%; background:#ef5350; }
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  overflow: hidden;
+  background: #080b11;
+  color: #f5f2ea;
+  font-family: Inter, Segoe UI, Arial, sans-serif;
+}
+
+canvas {
+  display: block;
+}
+
+#ui {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+}
+
+.panel {
+  position: absolute;
+  border: 1px solid rgba(238, 221, 178, 0.18);
+  background: rgba(11, 14, 20, 0.72);
+  box-shadow: 0 12px 34px rgba(0, 0, 0, 0.28);
+  backdrop-filter: blur(10px);
+  border-radius: 8px;
+}
+
+#playerPanel {
+  top: 14px;
+  left: 14px;
+  width: min(286px, calc(100vw - 28px));
+  padding: 12px;
+}
+
+.bar-label {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  margin: 7px 0 4px;
+  color: #d7d9df;
+  font-size: 12px;
+  line-height: 1.1;
+  text-transform: uppercase;
+}
+
+.bar {
+  width: 100%;
+  height: 12px;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  background: rgba(4, 6, 9, 0.7);
+  border-radius: 6px;
+}
+
+.fill {
+  width: 100%;
+  height: 100%;
+  transition: width 0.16s linear;
+}
+
+.hp {
+  background: linear-gradient(90deg, #7f1d35, #f05261);
+}
+
+.stamina {
+  background: linear-gradient(90deg, #177a56, #75e6a6);
+}
+
+.xp {
+  background: linear-gradient(90deg, #31559d, #70b7ff);
+}
+
+#stats {
+  margin-top: 10px;
+  color: #f3e7c0;
+  font-size: 13px;
+  line-height: 1.35;
+}
+
+#stats.danger {
+  color: #ff8795;
+}
+
+#runPanel {
+  top: 14px;
+  right: 14px;
+  width: 198px;
+  padding: 10px;
+}
+
+#objectiveText {
+  color: #fff0bb;
+  font-size: 14px;
+  font-weight: 700;
+  line-height: 1.25;
+}
+
+#roomText {
+  margin: 4px 0 9px;
+  color: #adb6c7;
+  font-size: 12px;
+}
+
+#minimap {
+  width: 168px;
+  height: 136px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: #10151f;
+  border-radius: 6px;
+}
+
+#weaponPanel {
+  right: 14px;
+  bottom: 14px;
+  min-width: 190px;
+  padding: 11px 12px;
+  text-align: right;
+}
+
+#weaponName {
+  color: #f7f0d8;
+  font-size: 18px;
+  font-weight: 800;
+}
+
+#weaponMeta {
+  margin-top: 3px;
+  color: #b9c1ce;
+  font-size: 12px;
+}
+
+#bossPanel {
+  left: 50%;
+  bottom: 18px;
+  width: min(460px, calc(100vw - 28px));
+  padding: 9px 12px 11px;
+  transform: translateX(-50%);
+}
+
+#bossName {
+  margin-bottom: 6px;
+  color: #9bf7df;
+  font-size: 13px;
+  font-weight: 800;
+  letter-spacing: 0;
+  text-transform: uppercase;
+}
+
+.boss {
+  height: 14px;
+}
+
+.boss-fill {
+  background: linear-gradient(90deg, #19806f, #62ffe1);
+}
+
+#message {
+  position: absolute;
+  left: 50%;
+  top: 13%;
+  max-width: min(460px, calc(100vw - 28px));
+  padding: 8px 12px;
+  color: #ffe28a;
+  font-size: 19px;
+  font-weight: 800;
+  text-align: center;
+  text-shadow: 0 2px 10px #000;
+  transform: translateX(-50%) translateY(-10px);
+  opacity: 0;
+  transition: opacity 0.18s ease, transform 0.18s ease;
+}
+
+#message.show {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+
+#reticle {
+  position: absolute;
+  width: 18px;
+  height: 18px;
+  border: 2px solid rgba(126, 245, 218, 0.82);
+  border-radius: 50%;
+  box-shadow: 0 0 12px rgba(126, 245, 218, 0.45);
+  transform: translate(-50%, -50%);
+}
+
+.enemy-hp {
+  position: absolute;
+  width: 56px;
+  height: 7px;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.24);
+  background: rgba(15, 5, 7, 0.82);
+  border-radius: 6px;
+}
+
+.enemy-hp > div {
+  height: 100%;
+  background: #ff606d;
+}
+
+.enemy-hp.boss-mark {
+  width: 72px;
+  height: 8px;
+}
+
+#screenOverlay {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-content: center;
+  gap: 12px;
+  padding: 24px;
+  text-align: center;
+  background: rgba(3, 5, 9, 0.78);
+  pointer-events: auto;
+}
+
+#overlayTitle {
+  color: #fff3c9;
+  font-size: clamp(34px, 7vw, 76px);
+  font-weight: 900;
+  line-height: 0.98;
+}
+
+#overlaySubtitle {
+  color: #d1d6df;
+  font-size: 16px;
+}
+
+#restartButton {
+  justify-self: center;
+  min-width: 132px;
+  min-height: 42px;
+  border: 1px solid rgba(255, 255, 255, 0.24);
+  background: #f0c25b;
+  color: #16110a;
+  border-radius: 6px;
+  cursor: pointer;
+  font: inherit;
+  font-weight: 800;
+  pointer-events: auto;
+}
+
+#restartButton:hover {
+  background: #ffd975;
+}
+
+.hidden {
+  display: none !important;
+}
+
+@media (max-width: 680px) {
+  #playerPanel {
+    width: calc(100vw - 28px);
+  }
+
+  #runPanel {
+    top: auto;
+    right: auto;
+    left: 14px;
+    bottom: 14px;
+    width: 172px;
+  }
+
+  #minimap {
+    width: 148px;
+    height: 112px;
+  }
+
+  #weaponPanel {
+    min-width: 156px;
+  }
+}
